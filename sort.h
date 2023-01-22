@@ -1,36 +1,84 @@
-#ifndef _SORT_
-#define _SORT_
-
-#include <stdlib.h>
+#include "sort.h"
 
 /**
- * struct listint_s - Doubly linked list node
- *
- * @n: Integer stored in the node
- * @prev: Pointer to the previous element of the list
- * @next: Pointer to the next element of the list
+ * swap - change position between two position of an array and print the array
+ * @array: array to sort
+ * @first: lowest position
+ * @last: highest position
+ * @size: size of array
  */
-typedef struct listint_s
+void swap(int *array,  int first, int last, size_t size)
 {
-	const int n;
-	struct listint_s *prev;
-	struct listint_s *next;
-} listint_t;
+	int aux, value;
 
-void print_array(const int *array, size_t size);
-void print_list(const listint_t *list);
-void bubble_sort(int *array, size_t size);
-void insertion_sort_list(listint_t **list);
-void selection_sort(int *array, size_t size);
-void quick_sort(int *array, size_t size);
-void _qsort(int *a, int low, int high, int size);
-void shell_sort(int *array, size_t size);
-void _ssort(int *a, int size, int n);
-void cocktail_sort_list(listint_t **list);
-void counting_sort(int *array, size_t size);
-void merge_sort(int *array, size_t size);
-void heap_sort(int *array, size_t size);
-void radix_sort(int *array, size_t size);
-void bitonic_sort(int *array, size_t size);
-void quick_sort_hoare(int *array, size_t size);
-#endif
+	value = array[first];
+	aux = array[last];
+	array[last] = value;
+	array[first] = aux;
+	print_array(array, size);
+}
+/**
+ * part_hoare - fin the partition position or pivot of the array
+ * @array: array to sort
+ * @first: lowest position
+ * @last: highest position
+ * @size: size of array
+ * Return: pivot index
+ */
+int part_hoare(int *array, int first, int last, size_t size)
+{
+	int pivot = array[last];
+	int i = first - 1;
+	int j = last + 1;
+
+	while (1)
+	{
+		do {
+			i++;
+		} while (array[i] < pivot);
+
+		do {
+			j--;
+		} while (array[j] > pivot);
+
+		if (i > j)
+			return (j);
+		if (array[i] > array[j])
+			swap(array, i, j, size);
+	}
+}
+
+/**
+ * sorting_hoare - sorts an array of integers in ascending order
+ * @array: array to sort
+ * @first: lowest position
+ * @last: highest position
+ * @size: size of array
+ */
+void sorting_hoare(int *array, int first, int last, size_t size)
+{
+	int pivot;
+
+	if (first < last)
+	{
+		pivot = part_hoare(array, first, last, size);
+		sorting_hoare(array, first, pivot, size);
+		sorting_hoare(array, pivot + 1, last, size);
+	}
+}
+
+/**
+ * quick_sort_hoare -  sorts an array of integers in ascending order using the
+ * Quick sort algorithm
+ * @array: array to sort
+ * @size: size of array
+ */
+void quick_sort_hoare(int *array, size_t size)
+{
+	int last = size - 1;
+
+	if (!array || size <= 1)
+		return;
+
+	sorting_hoare(array, 0, last, size);
+}
