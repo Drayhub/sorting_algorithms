@@ -75,8 +75,10 @@ void sorting_hoare(int *array, int first, int last, size_t size)
  */
 void quick_sort_hoare(int *array, size_t size)
 {
-    if (array == NULL || size <= 1)
-        return;
+	int last = size - 1;
 
-    sorting_hoare(array, 0, size - 1, size);
+	if (!array || size <= 1)
+		return;
+
+	sorting_hoare(array, 0, last, size);
 }
