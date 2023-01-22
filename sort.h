@@ -1,84 +1,79 @@
-#include "sort.h"
+#ifndef SORT_H
+#define SORT_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+/**
+ * struct listint_s - Doubly linked list node
+ *
+ * @n: Integer stored in the node
+ * @prev: Pointer to the previous element of the list
+ * @next: Pointer to the next element of the list
+ */
+typedef struct listint_s
+{
+	const int n;
+	struct listint_s *prev;
+	struct listint_s *next;
+} listint_t;
+
+/*  -------- Advanced Task -------------      */
+/**
+ * enum kind_e - function
+ * @SPADE: spade
+ * @HEART: heart
+ * @CLUB : club
+ * @DIAMOND: diamond
+ */
+typedef enum kind_e
+{
+	SPADE = 0,
+	HEART,
+	CLUB,
+	DIAMOND
+} kind_t;
 
 /**
- * swap - change position between two position of an array and print the array
- * @array: array to sort
- * @first: lowest position
- * @last: highest position
- * @size: size of array
+ * struct card_s - Playing card
+ *
+ * @value: Value of the card
+ * From "Ace" to "King"
+ * @kind: Kind of the card
  */
-void swap(int *array,  int first, int last, size_t size)
+typedef struct card_s
 {
-	int aux, value;
-
-	value = array[first];
-	aux = array[last];
-	array[last] = value;
-	array[first] = aux;
-	print_array(array, size);
-}
-/**
- * part_hoare - fin the partition position or pivot of the array
- * @array: array to sort
- * @first: lowest position
- * @last: highest position
- * @size: size of array
- * Return: pivot index
- */
-int part_hoare(int *array, int first, int last, size_t size)
-{
-	int pivot = array[last];
-	int i = first - 1;
-	int j = last + 1;
-
-	while (1)
-	{
-		do {
-			i++;
-		} while (array[i] < pivot);
-
-		do {
-			j--;
-		} while (array[j] > pivot);
-
-		if (i > j)
-			return (j);
-		if (array[i] > array[j])
-			swap(array, i, j, size);
-	}
-}
+	const char *value;
+	const kind_t kind;
+} card_t;
 
 /**
- * sorting_hoare - sorts an array of integers in ascending order
- * @array: array to sort
- * @first: lowest position
- * @last: highest position
- * @size: size of array
+ * struct deck_node_s - Deck of card
+ *
+ * @card: Pointer to the card of the node
+ * @prev: Pointer to the previous node of the list
+ * @next: Pointer to the next node of the list
  */
-void sorting_hoare(int *array, int first, int last, size_t size)
+typedef struct deck_node_s
 {
-	int pivot;
-
-	if (first < last)
-	{
-		pivot = part_hoare(array, first, last, size);
-		sorting_hoare(array, first, pivot, size);
-		sorting_hoare(array, pivot + 1, last, size);
-	}
-}
-
-/**
- * quick_sort_hoare -  sorts an array of integers in ascending order using the
- * Quick sort algorithm
- * @array: array to sort
- * @size: size of array
- */
-void quick_sort_hoare(int *array, size_t size)
-{
-	int last = size - 1;
-
-	if (!array || size <= 1)
-		return;
-
-	sorting_hoare(array, 0, last, size);
-}
+	const card_t *card;
+	struct deck_node_s *prev;
+	struct deck_node_s *next;
+} deck_node_t;
+/*   -------------functions----------------     */
+void print_list(const listint_t *list);
+void print_array(const int *array, size_t size);
+void bubble_sort(int *array, size_t size);
+void insertion_sort_list(listint_t **list);
+void selection_sort(int *array, size_t size);
+void quick_sort(int *array, size_t size);
+void shell_sort(int *array, size_t size);
+void cocktail_sort_list(listint_t **list);
+void counting_sort(int *array, size_t size);
+void merge_sort(int *array, size_t size);
+void heap_sort(int *array, size_t size);
+void radix_sort(int *array, size_t size);
+void bitonic_sort(int *array, size_t size);
+void quick_sort_hoare(int *array, size_t size);
+void sort_deck(deck_node_t **deck);
+#endif
